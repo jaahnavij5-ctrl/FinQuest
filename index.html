@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinQuest — Making Finance a Quest</title>
+  <meta name="description" content="FinQuest turns personal finance into an engaging quest. Track income, expenses, savings goals, and play the College Budget Challenge. No bank connections required." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">⚔️</div>
+      <div class="logo-text">
+        <span class="logo-title">FinQuest</span>
+        <span class="logo-sub">Making Finance a Quest</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="dashboard" id="nav-dashboard">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Dashboard</span>
+      </button>
+      <button class="nav-item" data-page="my-money" id="nav-my-money">
+        <span class="nav-icon">💰</span>
+        <span class="nav-label">My Money</span>
+      </button>
+      <button class="nav-item" data-page="quest" id="nav-quest">
+        <span class="nav-icon">🎮</span>
+        <span class="nav-label">Quest Mode</span>
+        <span class="nav-badge">Play</span>
+      </button>
+      <button class="nav-item" data-page="whatif" id="nav-whatif">
+        <span class="nav-icon">🤔</span>
+        <span class="nav-label">What If?</span>
+      </button>
+      <button class="nav-item" data-page="rewards" id="nav-rewards">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">Rewards</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-reset" id="btn-reset-data">🔄 Reset to Demo Data</button>
+      <p class="disclaimer">
+        ⚠️ <strong>Disclaimer:</strong> FinQuest is for educational purposes only. All simulations are fictional. No real financial advice is provided.
+      </p>
+    </div>
+  </aside>
+
+  <!-- Mobile Header -->
+  <header class="mobile-header">
+    <button class="hamburger" id="hamburger">☰</button>
+    <span class="mobile-logo">⚔️ FinQuest</span>
+    <div class="mobile-xp" id="mobile-xp-display">⭐ 0 XP</div>
+  </header>
+
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+  <!-- Main Content -->
+  <main class="main-content" id="main-content">
+
+    <!-- ==================== DASHBOARD PAGE ==================== -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle">Your financial quest overview</p>
+        </div>
+        <div class="xp-display" id="xp-display">
+          <span class="xp-icon">⭐</span>
+          <span id="xp-value">0</span> XP
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-grid">
+        <div class="stat-card accent-teal">
+          <div class="stat-icon">💳</div>
+          <div class="stat-body">
+            <p class="stat-label">Available Balance</p>
+            <p class="stat-value" id="stat-balance">₹0</p>
+          </div>
+        </div>
+        <div class="stat-card accent-green">
+          <div class="stat-icon">📈</div>
+          <div class="stat-body">
+            <p class="stat-label">Total Income</p>
+            <p class="stat-value" id="stat-income">₹0</p>
+          </div>
+        </div>
+        <div class="stat-card accent-red">
+          <div class="stat-icon">📉</div>
+          <div class="stat-body">
+            <p class="stat-label">Total Expenses</p>
+            <p class="stat-value" id="stat-expenses">₹0</p>
+          </div>
+        </div>
+        <div class="stat-card accent-purple">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-body">
+            <p class="stat-label">Savings Rate</p>
+            <p class="stat-value" id="stat-savings-rate">0%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Section -->
+      <div class="two-col-grid">
+        <!-- Monthly Budget Progress -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📅 Monthly Budget</h2>
+            <button class="btn-sm" id="btn-set-budget">Edit Budget</button>
+          </div>
+          <div class="budget-progress-wrap">
+            <div class="budget-labels">
+              <span id="budget-spent-label">Spent: ₹0</span>
+              <span id="budget-limit-label">Limit: ₹0</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar" id="budget-progress-bar" style="width: 0%"></div>
+            </div>
+            <p class="budget-note" id="budget-note">Set a monthly budget to track spending.</p>
+          </div>
+
+          <!-- Budget Modal -->
+          <div class="inline-form" id="budget-form" style="display:none;">
+            <input type="number" id="budget-input" class="form-input" placeholder="Monthly budget (₹)" min="1" />
+            <div class="form-actions">
+              <button class="btn-primary" id="btn-save-budget">Save</button>
+              <button class="btn-secondary" id="btn-cancel-budget">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Savings Goal Progress -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🎯 Savings Goal</h2>
+            <button class="btn-sm" id="btn-set-goal">Edit Goal</button>
+          </div>
+          <div class="savings-goal-wrap">
+            <div class="ring-container">
+              <svg class="ring-svg" viewBox="0 0 120 120">
+                <circle class="ring-track" cx="60" cy="60" r="50" />
+                <circle class="ring-fill" id="savings-ring" cx="60" cy="60" r="50"
+                  stroke-dasharray="314" stroke-dashoffset="314" />
+              </svg>
+              <div class="ring-center">
+                <span class="ring-percent" id="savings-percent">0%</span>
+                <span class="ring-label">of goal</span>
+              </div>
+            </div>
+            <div class="savings-info">
+              <p><span class="info-label">Saved:</span> <span id="savings-saved">₹0</span></p>
+              <p><span class="info-label">Goal:</span> <span id="savings-goal-amount">Not set</span></p>
+              <p><span class="info-label">Remaining:</span> <span id="savings-remaining">—</span></p>
+            </div>
+          </div>
+
+          <div class="inline-form" id="goal-form" style="display:none;">
+            <input type="number" id="goal-input" class="form-input" placeholder="Savings goal (₹)" min="1" />
+            <div class="form-actions">
+              <button class="btn-primary" id="btn-save-goal">Save</button>
+              <button class="btn-secondary" id="btn-cancel-goal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart + Insights -->
+      <div class="two-col-grid">
+        <!-- Expense Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📊 Spending Breakdown</h2>
+          </div>
+          <div class="chart-container" id="expense-chart-container">
+            <canvas id="expense-chart" width="340" height="220"></canvas>
+          </div>
+          <div class="chart-legend" id="chart-legend"></div>
+        </div>
+
+        <!-- Insights -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">💡 Insights</h2>
+          </div>
+          <div class="insights-list" id="insights-list">
+            <p class="empty-msg">Add transactions to see insights!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MY MONEY PAGE ==================== -->
+    <section class="page" id="page-my-money">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">My Money</h1>
+          <p class="page-subtitle">Track every rupee in and out</p>
+        </div>
+        <button class="btn-primary" id="btn-add-transaction">+ Add Transaction</button>
+      </div>
+
+      <!-- Add Transaction Form -->
+      <div class="card form-card" id="add-transaction-form" style="display:none;">
+        <h2 class="card-title" style="margin-bottom:1.2rem;">New Transaction</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="txn-type">Type</label>
+            <select class="form-select" id="txn-type">
+              <option value="income">Income 📈</option>
+              <option value="expense">Expense 📉</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="txn-title">Title</label>
+            <input type="text" class="form-input" id="txn-title" placeholder="e.g. Freelance payment" maxlength="50" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="txn-amount">Amount (₹)</label>
+            <input type="number" class="form-input" id="txn-amount" placeholder="0" min="0.01" step="0.01" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="txn-category">Category</label>
+            <select class="form-select" id="txn-category">
+              <option value="Food">🍕 Food</option>
+              <option value="Transport">🚌 Transport</option>
+              <option value="Education">📚 Education</option>
+              <option value="Entertainment">🎬 Entertainment</option>
+              <option value="Health">💊 Health</option>
+              <option value="Shopping">🛍️ Shopping</option>
+              <option value="Rent">🏠 Rent</option>
+              <option value="Utilities">💡 Utilities</option>
+              <option value="Salary">💼 Salary</option>
+              <option value="Freelance">💻 Freelance</option>
+              <option value="Gift">🎁 Gift</option>
+              <option value="Other">📦 Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="txn-date">Date</label>
+            <input type="date" class="form-input" id="txn-date" />
+          </div>
+        </div>
+        <div class="form-error" id="txn-error" style="display:none;"></div>
+        <div class="form-actions">
+          <button class="btn-primary" id="btn-save-txn">Save Transaction</button>
+          <button class="btn-secondary" id="btn-cancel-txn">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all" id="filter-all">All</button>
+        <button class="filter-btn" data-filter="income" id="filter-income">Income</button>
+        <button class="filter-btn" data-filter="expense" id="filter-expense">Expenses</button>
+        <input type="text" class="filter-search" id="filter-search" placeholder="🔍 Search..." />
+      </div>
+
+      <!-- Transaction List -->
+      <div class="transactions-list" id="transactions-list">
+        <p class="empty-msg">No transactions yet. Add one above!</p>
+      </div>
+    </section>
+
+    <!-- ==================== QUEST PAGE ==================== -->
+    <section class="page" id="page-quest">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">🎮 Quest Mode</h1>
+          <p class="page-subtitle">College Budget Challenge — survive the semester!</p>
+        </div>
+      </div>
+
+      <div id="quest-lobby" class="quest-lobby">
+        <div class="quest-intro-card">
+          <div class="quest-trophy">🎓</div>
+          <h2>The College Budget Challenge</h2>
+          <p>You're a first-year college student with a monthly stipend. Navigate a whole month of decisions and see if you can survive with savings intact!</p>
+          <div class="quest-rules">
+            <div class="rule-item"><span>💰</span> Starting Balance: <strong>₹8,000</strong></div>
+            <div class="rule-item"><span>🎯</span> Savings Goal: <strong>₹1,500</strong></div>
+            <div class="rule-item"><span>⚡</span> Random Events: Yes</div>
+            <div class="rule-item"><span>🏆</span> Reward: XP + Badge</div>
+          </div>
+          <button class="btn-primary btn-lg" id="btn-start-quest">⚔️ Start Quest</button>
+          <div id="quest-best-score" class="quest-best-score" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div id="quest-game" class="quest-game" style="display:none;">
+        <!-- Quest HUD -->
+        <div class="quest-hud">
+          <div class="hud-item">
+            <span class="hud-label">💰 Balance</span>
+            <span class="hud-value" id="q-balance">₹8,000</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">📅 Day</span>
+            <span class="hud-value" id="q-day">1 / 30</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">😊 Mood</span>
+            <span class="hud-value" id="q-mood">Great</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-label">💾 Saved</span>
+            <span class="hud-value" id="q-saved">₹0</span>
+          </div>
+        </div>
+
+        <!-- Quest Scenario -->
+        <div class="quest-scenario-card" id="quest-scenario-card">
+          <div class="scenario-badge" id="scenario-badge">📌 Scenario</div>
+          <h3 class="scenario-title" id="scenario-title">Loading...</h3>
+          <p class="scenario-desc" id="scenario-desc"></p>
+          <div class="scenario-knowledge" id="scenario-knowledge" hidden>
+            <strong>📚 Quick lesson — Rule of 72</strong>
+            <p>Divide 72 by an annual rate of return to estimate how many years it may take money to double. For example, 72 ÷ 7.2% ≈ 10 years. This is a rough estimate, not a guaranteed return.</p>
+          </div>
+          <div class="scenario-choices" id="scenario-choices"></div>
+        </div>
+
+        <!-- Quest Log -->
+        <div class="card">
+          <div class="card-header"><h2 class="card-title">📜 Quest Log</h2></div>
+          <div class="quest-log" id="quest-log">
+            <p class="log-entry">Quest started. Good luck! 🎓</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quest End Screen -->
+      <div id="quest-end" class="quest-end" style="display:none;">
+        <div class="end-card">
+          <div class="end-icon" id="end-icon">🏆</div>
+          <h2 id="end-title">Quest Complete!</h2>
+          <p id="end-desc"></p>
+          <div class="end-stats">
+            <div class="end-stat"><span class="es-label">Final Balance</span><span class="es-value" id="end-balance">₹0</span></div>
+            <div class="end-stat"><span class="es-label">Amount Saved</span><span class="es-value" id="end-saved">₹0</span></div>
+            <div class="end-stat"><span class="es-label">XP Earned</span><span class="es-value" id="end-xp">0 XP</span></div>
+          </div>
+          <div class="end-tip" id="end-tip"></div>
+          <div class="form-actions" style="justify-content:center; margin-top:1.5rem;">
+            <button class="btn-primary" id="btn-replay-quest">🔄 Play Again</button>
+            <button class="btn-secondary" id="btn-quest-to-rewards">🏆 View Rewards</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== WHAT IF PAGE ==================== -->
+    <section class="page" id="page-whatif">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">🤔 What If? Simulator</h1>
+          <p class="page-subtitle">Compare two financial choices side by side</p>
+        </div>
+      </div>
+
+      <div class="whatif-intro card">
+        <p>Enter two spending decisions and see how each affects your budget and savings. The simulator uses your current balance from My Money.</p>
+        <p class="current-balance-note">📊 Your current balance: <strong id="wi-current-balance">₹0</strong></p>
+      </div>
+
+      <div class="whatif-grid">
+        <!-- Option A -->
+        <div class="card whatif-card" id="wi-card-a">
+          <div class="wi-header wi-a-header">
+            <span class="wi-badge">Option A</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wi-a-name">Decision Name</label>
+            <input type="text" class="form-input" id="wi-a-name" placeholder="e.g. Buy a new phone" maxlength="60" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wi-a-cost">One-time Cost (₹)</label>
+            <input type="number" class="form-input" id="wi-a-cost" placeholder="0" min="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wi-a-monthly">Monthly Cost (₹)</label>
+            <input type="number" class="form-input" id="wi-a-monthly" placeholder="0" min="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wi-a-months">Over How Many Months?</label>
+            <input type="number" class="form-input" id="wi-a-months" placeholder="1" min="1" max="120" value="1" />
+          </div>
+          <div class="wi-result" id="wi-result-a" style="display:none;"></div>
+        </div>
+
+        <!-- VS Divider -->
+        <div class="vs-divider">
+          <span>VS</span>
+        </div>
+
+        <!-- Option B -->
+        <div class="card whatif-card" id="wi-card-b">
+          <div class="wi-header wi-b-header">
+            <span class="wi-badge">Option B</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wi-b-name">Decision Name</label>
+            <input type="text" class="form-input" id="wi-b-name" placeholder="e.g. Save & invest monthly" maxlength="60" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wi-b-cost">One-time Cost (₹)</label>
+            <input type="number" class="form-input" id="wi-b-cost" placeholder="0" min="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wi-b-monthly">Monthly Cost (₹)</label>
+            <input type="number" class="form-input" id="wi-b-monthly" placeholder="0" min="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wi-b-months">Over How Many Months?</label>
+            <input type="number" class="form-input" id="wi-b-months" placeholder="1" min="1" max="120" value="1" />
+          </div>
+          <div class="wi-result" id="wi-result-b" style="display:none;"></div>
+        </div>
+      </div>
+
+      <div class="form-actions" style="justify-content:center; margin-top:1.5rem;">
+        <button class="btn-primary btn-lg" id="btn-compare">⚡ Compare Now</button>
+        <button class="btn-secondary" id="btn-clear-whatif">Clear</button>
+      </div>
+
+      <div class="wi-verdict card" id="wi-verdict" style="display:none;">
+        <h2 class="card-title">📋 Verdict</h2>
+        <div id="wi-verdict-text"></div>
+      </div>
+
+      <!-- Presets -->
+      <div class="card">
+        <div class="card-header"><h2 class="card-title">🎯 Quick Scenarios</h2></div>
+        <div class="preset-grid" id="preset-grid">
+          <button class="preset-btn" data-preset="0">🚗 Buy vs Commute</button>
+          <button class="preset-btn" data-preset="1">☕ Coffee Habit vs Save</button>
+          <button class="preset-btn" data-preset="2">📱 New Phone vs Repair</button>
+          <button class="preset-btn" data-preset="3">🏠 Rent Near vs Far</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== REWARDS PAGE ==================== -->
+    <section class="page" id="page-rewards">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">🏆 Rewards</h1>
+          <p class="page-subtitle">Your financial achievements & XP</p>
+        </div>
+        <div class="xp-display-large">
+          <span>⭐</span> <span id="rewards-xp">0</span> XP Total
+        </div>
+      </div>
+
+      <!-- XP Progress Bar -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">🌟 Level Progress</h2>
+          <span class="level-badge" id="level-badge">Level 1</span>
+        </div>
+        <div class="level-info">
+          <p>Level up by completing quests and reaching savings goals!</p>
+          <div class="level-progress-wrap">
+            <div class="budget-labels">
+              <span id="level-xp-label">0 XP</span>
+              <span id="level-next-label">100 XP to next level</span>
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar teal" id="level-progress-bar" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges Grid -->
+      <div class="card">
+        <div class="card-header"><h2 class="card-title">🎖️ Badges</h2></div>
+        <div class="badges-grid" id="badges-grid"></div>
+      </div>
+
+      <!-- Rule of 72 Knowledge Card -->
+      <div class="card rule72-card" id="rule72-card">
+        <div class="card-header">
+          <h2 class="card-title">⚡ The Rule of 72 — Money Doubling Calculator</h2>
+          <span class="rule72-badge">Knowledge Boost</span>
+        </div>
+
+        <!-- Explanation Panel -->
+        <div class="rule72-explainer">
+          <div class="rule72-formula">
+            <div class="formula-box">
+              <span class="formula-text">Years to Double</span>
+              <span class="formula-eq">=</span>
+              <div class="formula-fraction">
+                <span class="frac-top">72</span>
+                <span class="frac-line"></span>
+                <span class="frac-bot">Annual Interest Rate (%)</span>
+              </div>
+            </div>
+          </div>
+          <p class="rule72-desc">
+            The <strong>Rule of 72</strong> is a mental shortcut to estimate how long it takes an investment to double, given a fixed annual return. It works best for rates between 6% and 10%, and applies equally to <em>inflation eating your savings</em>.
+          </p>
+        </div>
+
+        <!-- Interactive Calculator -->
+        <div class="rule72-calc">
+          <div class="calc-input-row">
+            <div class="calc-field">
+              <label class="form-label" for="r72-amount">Principal Amount (₹)</label>
+              <input type="number" class="form-input" id="r72-amount" value="10000" min="100" max="10000000" />
+            </div>
+            <div class="calc-field">
+              <label class="form-label" for="r72-rate">Annual Interest Rate (%)</label>
+              <div class="rate-slider-wrap">
+                <input type="range" id="r72-rate-slider" min="1" max="30" value="8" class="rate-slider" />
+                <input type="number" class="form-input rate-number" id="r72-rate" value="8" min="0.1" max="72" step="0.1" />
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary" id="btn-calc-r72" style="margin-top:4px;">⚡ Calculate Doubling Time</button>
+        </div>
+
+        <!-- Result Panel -->
+        <div class="rule72-result" id="rule72-result" style="display:none;">
+          <div class="r72-result-grid">
+            <div class="r72-stat">
+              <span class="r72-stat-label">Years to Double</span>
+              <span class="r72-stat-value" id="r72-years">—</span>
+            </div>
+            <div class="r72-stat">
+              <span class="r72-stat-label">Doubled Amount</span>
+              <span class="r72-stat-value" id="r72-doubled">—</span>
+            </div>
+            <div class="r72-stat">
+              <span class="r72-stat-label">Tripled in ~</span>
+              <span class="r72-stat-value" id="r72-tripled">—</span>
+            </div>
+            <div class="r72-stat">
+              <span class="r72-stat-label">10× in ~</span>
+              <span class="r72-stat-value" id="r72-tenfold">—</span>
+            </div>
+          </div>
+
+          <!-- Visual Doubling Timeline -->
+          <div class="r72-timeline" id="r72-timeline"></div>
+
+          <!-- Inflation Warning -->
+          <div class="r72-inflation-note" id="r72-inflation-note"></div>
+        </div>
+
+        <!-- Rate Comparison Table -->
+        <div class="rule72-table-wrap">
+          <h3 class="rule72-table-title">📊 Quick Reference — Common Rates</h3>
+          <div class="rule72-table">
+            <div class="r72-row r72-header">
+              <span>Instrument</span><span>Typical Rate</span><span>Doubles In</span><span>Risk</span>
+            </div>
+            <div class="r72-row">
+              <span>💵 Savings Account</span><span>3.5%</span><span>~20.6 yrs</span><span class="risk-low">Very Low</span>
+            </div>
+            <div class="r72-row">
+              <span>🏦 Fixed Deposit</span><span>7%</span><span>~10.3 yrs</span><span class="risk-low">Low</span>
+            </div>
+            <div class="r72-row">
+              <span>📈 PPF / EPF</span><span>7.1%</span><span>~10.1 yrs</span><span class="risk-low">Very Low</span>
+            </div>
+            <div class="r72-row">
+              <span>🏘️ Real Estate</span><span>8–10%</span><span>7–9 yrs</span><span class="risk-med">Medium</span>
+            </div>
+            <div class="r72-row">
+              <span>📊 Index Funds</span><span>10–12%</span><span>6–7.2 yrs</span><span class="risk-med">Medium</span>
+            </div>
+            <div class="r72-row r72-warning-row">
+              <span>⚠️ Inflation (eats savings)</span><span>6–7%</span><span>~10–12 yrs</span><span class="risk-high">Your enemy</span>
+            </div>
+          </div>
+          <p class="r72-disclaimer">⚠️ Rates are illustrative averages for India (2024–25). Past returns do not guarantee future performance. This is not investment advice.</p>
+        </div>
+      </div>
+
+      <!-- Financial Tips -->
+      <div class="card">
+        <div class="card-header"><h2 class="card-title">📚 Financial Tips Unlocked</h2></div>
+        <div class="tips-list" id="tips-list">
+          <div class="tip-item">
+            <span class="tip-icon">💡</span>
+            <p><strong>Pay Yourself First:</strong> Automatically save a portion of income before spending. Even ₹500/month adds up to ₹6,000/year!</p>
+          </div>
+          <div class="tip-item">
+            <span class="tip-icon">📊</span>
+            <p><strong>50/30/20 Rule:</strong> Allocate 50% to needs, 30% to wants, and 20% to savings.</p>
+          </div>
+          <div class="tip-item">
+            <span class="tip-icon">🚫</span>
+            <p><strong>Avoid Lifestyle Inflation:</strong> When your income grows, resist the urge to upgrade everything immediately.</p>
+          </div>
+          <div class="tip-item">
+            <span class="tip-icon">⚡</span>
+            <p><strong>Rule of 72:</strong> Divide 72 by your annual interest rate to find how many years your money takes to double. At 8%, that's just 9 years!</p>
+          </div>
+          <div class="tip-item">
+            <span class="tip-icon">💸</span>
+            <p><strong>Beat Inflation:</strong> Inflation (~6%) doubles the price of goods every 12 years. If your savings earn less than inflation, you're losing real purchasing power.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
